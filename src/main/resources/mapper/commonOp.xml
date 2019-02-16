@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.yangrui.database.dao.CommonOpDao">
+
+ <select id="findAll" resultType="java.util.HashMap">
+ 	select
+     <foreach collection="columnParams" item="column" separator=",">
+         ${column}
+     </foreach>
+     from ${fromTable}
+     <foreach collection="relationParams" item="relation" separator=" ">
+         ${relation}
+     </foreach>
+     <if test="whereParams!=null and whereParams!=''">
+         where ${whereParams}
+     </if>
+     <if test="orderBy !=null and orderBy!=''">
+         order by ${orderBy}
+     </if>
+     <if test="start!=null and end!=null">
+         limit #{start},#{end}
+     </if>
+ </select>
+
+    <select id="countAll" resultType="int">
+        select count(1)
+        from ${fromTable}
+        <foreach collection="relationParams" item="relation" separator=" ">
+            ${relation}
+        </foreach>
+        <if test="whereParams!=null and whereParams!=''">
+            where ${whereParams}
+        </if>
+        <if test="orderBy !=null and orderBy!=''">
+            order by ${orderBy}
+        </if>
+    </select>
+    <!--通用更新-->
+    <update id="update">
+        update ${entityName} set
+        <foreach collection="maps" item="value" index="key" separator=",">
+            ${key} = #{value}
+        </foreach>
+        where ${pk.key} = #{pk.value}
+    </update>
+
+    <insert id="insert" >
+        insert into ${entityName}
+        <foreach collection="maps" item="value" index="key" separator="," close=")" open="(">
+            ${key}
+        </foreach>
+        value
+        <foreach collection="maps" item="value" index="key" separator="," close=")" open="(">
+            #{value}
+        </foreach>
+    </insert>
+    
+    <delete id="delete">
+        delete from ${entityName} where ${pk.key} = #{pk.value}
+    </delete>
+
+    <select id="getMaxId" resultType="int">
+        select max(CAST(${pk.key} AS UNSIGNED))+1  from ${entityName}
+    </select>
+ </mapper>

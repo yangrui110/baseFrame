@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑界面</title>
+    <link rel="stylesheet" th:href="@{/common/layui/css/layui.css}" media="all">
+</head>
+<body>
+<form class="layui-form" lay-filter="form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="agex" placeholder="年龄" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" placeholder="姓名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</form>
+<script th:src="@{/common/layui/layui.js}"></script>
+<script th:src="@{/templates/common/js/list.js}"></script>
+<script th:src="@{/js/jquery-3.3.1.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/apiClient.js}"></script>
+<script type="text/javascript">
+    layui.use('form', function(){
+        var form = layui.form;
+        form.on('submit(*)', function(data){
+            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            var condition={};
+            condition.entityName="user";
+            condition.jsonMap=data.field;
+            condition.PK={key:"id",value:data.field.idx}
+            apiClient.save(JSON.stringify(condition),function (data) {
+                if(data.result)
+                    layer.msg("保存成功")
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index);
+            })
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        //各种基于事件的操作，下面会有进一步介绍
+    });
+</script>
+</body>
+</html>

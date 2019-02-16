@@ -1,0 +1,32 @@
+	body{overflow-y: scroll;}
+	.layui-table-cell{
+		height:40px;
+		line-height:40px;
+		font-size:15px;
+	}
+	.layui-table-page{
+		margin-bottom: 24px;
+	}
+	
+	.marCenter{
+		width:340px;
+		margin:0 auto
+	}
+	.serInput{
+		/*margin-left:20px;*/
+		height:35px;
+	}
+	.topButton{
+		width:300px;
+		margin-left:20px
+	}
+	.newOne{
+  		content: '';
+	    position: absolute;
+	    left: 5px;
+	    top: 0;
+	    z-index: 0;
+	    width: 1px;
+	    height: 100%;
+	    background-color: red;
+  	}
